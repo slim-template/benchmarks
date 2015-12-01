@@ -6,4 +6,6 @@ cache: bundler
 script: "bundle exec rake $TASK"
 env:
   matrix:
-    - "TASK=bench"
+    - "TASK=bench TEMPLATE=simple MODE=compiled"
+    - "TASK=bench TEMPLATE=simple MODE=parsing"
+    - "TASK=bench TEMPLATE=simple MODE=tilt"

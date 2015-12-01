@@ -2,5 +2,6 @@ require 'rake/testtask'
 
 desc 'Run Slim benchmarks!'
 task :bench do
-  ruby('run-benchmarks.rb')
+  mode = ENV['MODE'] || 'compiled'
+  ruby("run-#{mode}.rb")
 end
