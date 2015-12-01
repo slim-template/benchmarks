@@ -1,23 +1,25 @@
 #!/usr/bin/env ruby
 
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'), File.dirname(__FILE__))
-
-require 'slim'
-require 'context'
-
 require 'benchmark/ips'
 require 'tilt'
 require 'erubis'
 require 'erb'
 require 'haml'
+require 'slim'
 
 class SlimBenchmarks
   def initialize(slow)
-    @benches    = []
+    @benches = []
 
-    @erb_code  = File.read(File.dirname(__FILE__) + '/view.erb')
-    @haml_code = File.read(File.dirname(__FILE__) + '/view.haml')
-    @slim_code = File.read(File.dirname(__FILE__) + '/view.slim')
+    erb_path  = File.expand_path("./views/#{ENV['TEMPLATE']}.erb", __dir__)
+    haml_path = File.expand_path("./views/#{ENV['TEMPLATE']}.haml", __dir__)
+    slim_path = File.expand_path("./views/#{ENV['TEMPLATE']}.slim", __dir__)
+    context_path = "./views/#{ENV['TEMPLATE']}.rb"
+
+    @erb_code  = File.read(erb_path)
+    @haml_code = File.read(haml_path)
+    @slim_code = File.read(slim_path)
+    require_relative context_path
 
     init_compiled_benches
     init_tilt_benches
@@ -28,7 +30,7 @@ class SlimBenchmarks
     haml_pretty = Haml::Engine.new(@haml_code, format: :html5)
     haml_ugly   = Haml::Engine.new(@haml_code, format: :html5, ugly: true)
 
-    context  = Context.new
+    context = Context.new
 
     haml_pretty.def_method(context, :run_haml_pretty)
     haml_ugly.def_method(context, :run_haml_ugly)
