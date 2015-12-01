@@ -3,6 +3,7 @@ require 'tilt'
 require 'erubis'
 require 'erb'
 require 'haml'
+require 'hamlit'
 require 'slim'
 
 module SlimBenchmarks
@@ -47,15 +48,15 @@ module SlimBenchmarks
     explain_bench
   end
 
-  def init_erb_bench
+  def init_erb_benches
     # Initialize bench with @erb_code and @context
   end
 
-  def init_haml_bench
+  def init_haml_benches
     # Initialize bench with @haml_code and @context
   end
 
-  def init_slim_bench
+  def init_slim_benches
     # Initialize bench with @slim_code and @context
   end
 
