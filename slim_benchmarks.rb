@@ -70,4 +70,8 @@ module SlimBenchmarks
   def explain_bench
     # override to notice about benchmark
   end
+
+  def escape_html?
+    ENV['ESCAPE'] == '1'
+  end
 end

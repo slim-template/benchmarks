@@ -9,3 +9,4 @@ env:
     - "TASK=bench TEMPLATE=simple MODE=compiled"
     - "TASK=bench TEMPLATE=simple MODE=parsing"
     - "TASK=bench TEMPLATE=simple MODE=tilt"
+    - "TASK=bench TEMPLATE=escaped MODE=compiled ESCAPE=1"

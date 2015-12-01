@@ -13,8 +13,9 @@ class ParsingBenchmarks
   end
 
   def init_haml_benches
-    bench('haml pretty') { Haml::Engine.new(@haml_code, format: :html5, escape_attrs: false).render(context) }
-    bench('haml ugly')   { Haml::Engine.new(@haml_code, format: :html5, ugly: true, escape_attrs: false).render(context) }
+    options = { escape_attrs: escape_html?, escape_html: escape_html?, format: :html5 }
+    bench('haml pretty') { Haml::Engine.new(@haml_code, options).render(context) }
+    bench('haml ugly')   { Haml::Engine.new(@haml_code, options.merge(ugly: true)).render(context) }
   end
 
   def init_slim_benches

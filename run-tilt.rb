@@ -16,8 +16,9 @@ class TiltBenchmarks
   end
 
   def init_haml_benches
-    tilt_haml_pretty = Tilt::HamlTemplate.new(format: :html5, escape_attrs: false) { @haml_code }
-    tilt_haml_ugly   = Tilt::HamlTemplate.new(format: :html5, ugly: true, escape_attrs: false) { @haml_code }
+    options = { escape_attrs: escape_html?, escape_html: escape_html?, format: :html5 }
+    tilt_haml_pretty = Tilt::HamlTemplate.new(options) { @haml_code }
+    tilt_haml_ugly   = Tilt::HamlTemplate.new(options.merge(ugly: true)) { @haml_code }
 
     bench('haml pretty') { tilt_haml_pretty.render(context) }
     bench('haml ugly')   { tilt_haml_ugly.render(context) }

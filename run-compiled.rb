@@ -6,22 +6,31 @@ class CompiledBenchmarks
   include SlimBenchmarks
 
   def init_erb_benches
+    init_erb_without_escape unless escape_html?
+
     context.instance_eval %{
-      def run_erb; #{ERB.new(@erb_code).src}; end
       def run_erubis; #{Erubis::Eruby.new(@erb_code).src}; end
-      def run_temple_erb; #{Temple::ERB::Engine.new.call @erb_code}; end
       def run_fast_erubis; #{Erubis::FastEruby.new(@erb_code).src}; end
     }
 
-    bench('erb')         { context.run_erb }
     bench('erubis')      { context.run_erubis }
     bench('fast erubis') { context.run_fast_erubis }
+  end
+
+  # These engines don't support unescaping by `==`
+  def init_erb_without_escape
+    context.instance_eval %{
+      def run_erb; #{ERB.new(@erb_code).src}; end
+      def run_temple_erb; #{Temple::ERB::Engine.new.call @erb_code}; end
+    }
+    bench('erb') { context.run_erb }
     bench('temple erb')  { context.run_temple_erb }
   end
 
   def init_haml_benches
-    haml_pretty = Haml::Engine.new(@haml_code, format: :html5, escape_attrs: false)
-    haml_ugly   = Haml::Engine.new(@haml_code, format: :html5, ugly: true, escape_attrs: false)
+    options = { escape_attrs: escape_html?, escape_html: escape_html?, format: :html5 }
+    haml_pretty = Haml::Engine.new(@haml_code, options)
+    haml_ugly   = Haml::Engine.new(@haml_code, options.merge(ugly: true))
     haml_pretty.def_method(context, :run_haml_pretty)
     haml_ugly.def_method(context, :run_haml_ugly)
 
