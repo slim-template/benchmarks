@@ -13,10 +13,10 @@ class CompiledBenchmarks
       def run_fast_erubis; #{Erubis::FastEruby.new(@erb_code).src}; end
     }
 
-    bench('(1) erb')         { context.run_erb }
-    bench('(1) erubis')      { context.run_erubis }
-    bench('(1) fast erubis') { context.run_fast_erubis }
-    bench('(1) temple erb')  { context.run_temple_erb }
+    bench('erb')         { context.run_erb }
+    bench('erubis')      { context.run_erubis }
+    bench('fast erubis') { context.run_fast_erubis }
+    bench('temple erb')  { context.run_temple_erb }
   end
 
   def init_haml_benches
@@ -25,8 +25,8 @@ class CompiledBenchmarks
     haml_pretty.def_method(context, :run_haml_pretty)
     haml_ugly.def_method(context, :run_haml_ugly)
 
-    bench('(1) haml pretty') { context.run_haml_pretty }
-    bench('(1) haml ugly')   { context.run_haml_ugly }
+    bench('haml pretty') { context.run_haml_pretty }
+    bench('haml ugly')   { context.run_haml_ugly }
   end
 
   def init_slim_benches
@@ -35,18 +35,18 @@ class CompiledBenchmarks
       def run_slim_ugly; #{Slim::Engine.new.call @slim_code}; end
     }
 
-    bench('(1) slim pretty') { context.run_slim_pretty }
-    bench('(1) slim ugly')   { context.run_slim_ugly }
+    bench('slim pretty') { context.run_slim_pretty }
+    bench('slim ugly')   { context.run_slim_ugly }
   end
 
   private
 
   def explain_bench
     puts "
-(1) Compiled benchmark. Template is parsed before the benchmark and
-    generated ruby code is compiled into a method.
-    This is the fastest evaluation strategy because it benchmarks
-    pure execution speed of the generated ruby code.
+Compiled benchmark. Template is parsed before the benchmark and
+generated ruby code is compiled into a method.
+This is the fastest evaluation strategy because it benchmarks
+pure execution speed of the generated ruby code.
 
 Temple ERB is the ERB implementation using the Temple framework. It shows the
 overhead added by the Temple framework compared to ERB.
