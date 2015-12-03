@@ -5,6 +5,10 @@ require 'erb'
 require 'haml'
 require 'slim'
 
+if /^ruby/ =~ RUBY_DESCRIPTION
+  require 'hamlit'
+end
+
 module SlimBenchmarks
   def initialize
     @benches  = []
@@ -18,28 +22,10 @@ module SlimBenchmarks
       @context = Object.new
     end
 
-    erb_path = File.expand_path("./views/#{@template}.erb", __dir__)
-    if File.exist?(erb_path)
-      @erb_code = File.read(erb_path)
-      init_erb_benches
-    end
-
-    haml_path = File.expand_path("./views/#{@template}.haml", __dir__)
-    if File.exist?(haml_path)
-      @haml_code = File.read(haml_path)
-      init_haml_benches
-    end
-
-    slim_path = File.expand_path("./views/#{@template}.slim", __dir__)
-    if File.exist?(slim_path)
-      @slim_code = File.read(slim_path)
-      init_slim_benches
-    end
-
-    if on_mri?
-      require 'hamlit'
-      init_mri_benches
-    end
+    (@erb_code  = load_template(@template, 'erb'))  && init_erb_benches
+    (@haml_code = load_template(@template, 'haml')) && init_haml_benches
+    (@slim_code = load_template(@template, 'slim')) && init_slim_benches
+    init_mri_benches if on_mri?
   end
 
   def run
@@ -71,6 +57,11 @@ module SlimBenchmarks
   private
 
   attr_reader :context
+
+  def load_template(template, ext)
+    path = File.expand_path("../views/#{template}.#{ext}", __FILE__)
+    File.exist?(path) && File.read(path)
+  end
 
   def bench(name, &block)
     @benches.push([name, block])
