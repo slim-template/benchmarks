@@ -9,14 +9,9 @@ rvm:
 sudo: false
 cache: bundler
 env:
+  global: "JRUBY_OPTS=-Xcext.enabled=true"
   matrix:
     - "TEMPLATE=simple MODE=compiled"
     - "TEMPLATE=simple MODE=parsing"
     - "TEMPLATE=simple MODE=tilt"
     - "TEMPLATE=escaped MODE=compiled ESCAPE=1"
-matrix:
-  include:
-    - rvm: jruby-head
-      env: "JRUBY_OPTS=-Xcext.enabled=true"
-    - rvm: jruby-19mode
-      env: "JRUBY_OPTS=-Xcext.enabled=true"
