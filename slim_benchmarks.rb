@@ -3,7 +3,6 @@ require 'tilt'
 require 'erubis'
 require 'erb'
 require 'haml'
-require 'hamlit'
 require 'slim'
 
 module SlimBenchmarks
@@ -36,6 +35,11 @@ module SlimBenchmarks
       @slim_code = File.read(slim_path)
       init_slim_benches
     end
+
+    if on_mri?
+      require 'hamlit'
+      init_mri_benches
+    end
   end
 
   def run
@@ -60,6 +64,10 @@ module SlimBenchmarks
     # Initialize bench with @slim_code and @context
   end
 
+  def init_mri_benches
+    # Initialize some benches for only MRI
+  end
+
   private
 
   attr_reader :context
@@ -74,5 +82,9 @@ module SlimBenchmarks
 
   def escape_html?
     ENV['ESCAPE'] == '1'
+  end
+
+  def on_mri?
+    /^ruby/ =~ RUBY_DESCRIPTION
   end
 end

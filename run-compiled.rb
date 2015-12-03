@@ -33,13 +33,9 @@ class CompiledBenchmarks
     haml_ugly   = Haml::Engine.new(@haml_code, options.merge(ugly: true))
     haml_pretty.def_method(context, :run_haml_pretty)
     haml_ugly.def_method(context, :run_haml_ugly)
-    context.instance_eval %{
-      def run_hamlit; #{Hamlit::Engine.new(options).call @haml_code}; end
-    }
 
     bench('haml pretty') { context.run_haml_pretty }
     bench('haml ugly')   { context.run_haml_ugly }
-    bench('hamlit')      { context.run_hamlit }
   end
 
   def init_slim_benches
@@ -50,6 +46,13 @@ class CompiledBenchmarks
 
     bench('slim pretty') { context.run_slim_pretty }
     bench('slim ugly')   { context.run_slim_ugly }
+  end
+
+  def init_mri_benches
+    context.instance_eval %{
+      def run_hamlit; #{Hamlit::Engine.new(escape_attrs: escape_html?, escape_html: escape_html?, format: :html).call @haml_code}; end
+    }
+    bench('hamlit') { context.run_hamlit }
   end
 
   private
