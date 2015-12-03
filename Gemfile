@@ -9,5 +9,5 @@ gem 'slim',   github: 'slim-template/slim'
 gem 'temple', github: 'judofyr/temple'
 
 if /^ruby/ =~ RUBY_DESCRIPTION
-  gem 'hamlit', github: 'k0kubun/hamlit'
+  gem 'hamlit', github: 'k0kubun/hamlit', submodule: true
 end
