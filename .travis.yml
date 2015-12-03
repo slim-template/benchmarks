@@ -6,8 +6,6 @@ rvm:
   - 2.0.0
   - rbx-2
   - 1.9.3
-  - jruby-head
-  - jruby-19mode
 sudo: false
 cache: bundler
 env:
@@ -16,3 +14,9 @@ env:
     - "TEMPLATE=simple MODE=parsing"
     - "TEMPLATE=simple MODE=tilt"
     - "TEMPLATE=escaped MODE=compiled ESCAPE=1"
+matrix:
+  include:
+    - rvm: jruby-head
+      env: "JRUBY_OPTS=-Xcext.enabled=true"
+    - rvm: jruby-19mode
+      env: "JRUBY_OPTS=-Xcext.enabled=true"
