@@ -14,14 +14,7 @@ module SlimBenchmarks
     @benches  = []
     @template = ENV['TEMPLATE'] || 'simple'
 
-    context_path = "./views/#{@template}.rb"
-    if File.exist?(context_path)
-      require_relative context_path
-      @context = Context.new
-    else
-      @context = Object.new
-    end
-
+    @context    = load_context(@template)
     (@erb_code  = load_template(@template, 'erb'))  && init_erb_benches
     (@haml_code = load_template(@template, 'haml')) && init_haml_benches
     (@slim_code = load_template(@template, 'slim')) && init_slim_benches
@@ -61,6 +54,13 @@ module SlimBenchmarks
   def load_template(template, ext)
     path = File.expand_path("../views/#{template}.#{ext}", __FILE__)
     File.exist?(path) && File.read(path)
+  end
+
+  def load_context(template)
+    Object.new.tap do |context|
+      context_path = "./views/#{template}.rb"
+      context.instance_eval(File.read(context_path)) if File.exist?(context_path)
+    end
   end
 
   def bench(name, &block)
