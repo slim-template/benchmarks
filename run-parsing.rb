@@ -23,6 +23,10 @@ class ParsingBenchmarks
     bench('slim ugly')   { Slim::Template.new { @slim_code }.render(context) }
   end
 
+  def init_mri_benches
+    bench('hamlit') { Hamlit::Template.new(escape_attrs: escape_html?, escape_html: escape_html?) { @haml_code }.render(context) }
+  end
+
   private
 
   def context_binding

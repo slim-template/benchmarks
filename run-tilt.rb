@@ -32,6 +32,11 @@ class TiltBenchmarks
     bench('slim ugly')   { tilt_slim_ugly.render(context) }
   end
 
+  def init_mri_benches
+    tilt_hamlit = Hamlit::Template.new(escape_attrs: escape_html?, escape_html: escape_html?) { @haml_code }
+    bench('hamlit') { tilt_hamlit.render(context) }
+  end
+
   private
 
   def explain_bench
