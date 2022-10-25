@@ -23,23 +23,20 @@ class SlimBenchmarks
   end
 
   def init_compiled_benches
-    haml = Haml::Engine.new(@haml_code, format: :html5, escape_attrs: false)
-
-    context  = Context.new
-
-    haml.def_method(context, :run_haml)
+    context = Context.new
     context.instance_eval %{
       def run_erb; #{ERB.new(@erb_code).src}; end
       def run_temple_erb; #{Temple::ERB::Engine.new.call(@erb_code)}; end
       def run_erubi; #{Erubi::Engine.new(@erb_code).src}; end
+      def run_haml; #{Haml::Engine.new.call(@haml_code)}; end
       def run_slim; #{Slim::Engine.new.call(@slim_code)}; end
     }
 
     bench(:compiled, "erb #{ERB.version}")            { context.run_erb }
-    bench(:compiled, "erubis #{Erubi::VERSION}")      { context.run_erubi }
+    bench(:compiled, "erubi #{Erubi::VERSION}")       { context.run_erubi }
     bench(:compiled, "temple erb #{Temple::VERSION}") { context.run_temple_erb }
-    bench(:compiled, "slim #{Slim::VERSION}")         { context.run_slim }
     bench(:compiled, "haml #{Haml::VERSION}")         { context.run_haml }
+    bench(:compiled, "slim #{Slim::VERSION}")         { context.run_slim }
   end
 
   def run
