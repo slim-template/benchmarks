@@ -7,7 +7,7 @@ require 'context'
 
 require 'benchmark/ips'
 require 'tilt'
-require 'erubis'
+require 'erubi'
 require 'erb'
 require 'haml'
 
@@ -31,12 +31,12 @@ class SlimBenchmarks
     context.instance_eval %{
       def run_erb; #{ERB.new(@erb_code).src}; end
       def run_temple_erb; #{Temple::ERB::Engine.new.call(@erb_code)}; end
-      def run_erubis; #{Erubis::FastEruby.new(@erb_code).src}; end
+      def run_erubi; #{Erubi::Engine.new(@erb_code).src}; end
       def run_slim; #{Slim::Engine.new.call(@slim_code)}; end
     }
 
     bench(:compiled, "erb #{ERB.version}")            { context.run_erb }
-    bench(:compiled, "erubis #{Erubis::VERSION}")     { context.run_erubis }
+    bench(:compiled, "erubis #{Erubi::VERSION}")      { context.run_erubi }
     bench(:compiled, "temple erb #{Temple::VERSION}") { context.run_temple_erb }
     bench(:compiled, "slim #{Slim::VERSION}")         { context.run_slim }
     bench(:compiled, "haml #{Haml::VERSION}")         { context.run_haml }
