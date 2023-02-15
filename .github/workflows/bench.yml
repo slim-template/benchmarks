@@ -10,6 +10,7 @@ on:
       - reopened
   schedule:
     - cron: "00 15 * * *"
+  workflow_dispatch:
 jobs:
   bench:
     runs-on: ubuntu-latest
