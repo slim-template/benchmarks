@@ -28,7 +28,7 @@ class SlimBenchmarks
       def run_erb; #{ERB.new(@erb_code).src}; end
       def run_temple_erb; #{Temple::ERB::Engine.new.call(@erb_code)}; end
       def run_erubi; #{Erubi::Engine.new(@erb_code).src}; end
-      def run_haml; #{Haml::Engine.new.call(@haml_code)}; end
+      def run_haml; #{Haml::Engine.new(escape_html: false, escape_attrs: false).call(@haml_code)}; end
       def run_slim; #{Slim::Engine.new.call(@slim_code)}; end
     }
 
